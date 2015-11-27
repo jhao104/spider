@@ -76,7 +76,7 @@ def get_info(tz_id):
         info['content'] = text
         info['image'] = image_li
     else:
-        info['content'] = content
+        info['content'] = content.text.strip()
         info['image'] = 'null'
     info['source'] = tb
     info['title'] = ''.join(title)
@@ -88,6 +88,8 @@ def get_info(tz_id):
     reply_floor = tree.xpath('//div[@class="l_post j_l_post l_post_bright  "]')
     reply_li = []
     for each_floor in reply_floor:
+        if not each_floor.xpath('./div[3]/div[1]/cc/div'):  # 滤掉百度推广
+            return False
         reply_content = each_floor.xpath('./div[3]/div[1]/cc/div')[0].xpath('string(.)').strip()
         reply_info = {}
         if len(reply_content) > 0:  # 滤掉无文字的回复
